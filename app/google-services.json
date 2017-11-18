@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "253336016308",
+    "firebase_url": "https://combitracker.firebaseio.com",
+    "project_id": "combitracker",
+    "storage_bucket": "combitracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:253336016308:android:e22963c5b01ff346",
+        "android_client_info": {
+          "package_name": "com.combitracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "253336016308-fqm2cos0i440c5p5juah6r2qrch5lvsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAy5-gNFYP3Ns9dgllQF3zpDg4mkJmxIwA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
