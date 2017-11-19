@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
                     SubMenu subMenu = menuNavigation.addSubMenu(ruta);
                     DataSnapshot subRutas= ds.child("Subrutas");
                     for(DataSnapshot ds2:subRutas.getChildren()){
-                        subMenu.add(x,subMenus.size(),0,ds2.getKey());
+                        subMenu.add(x,subMenus.size(),0,ds2.getKey()).setIcon(R.drawable.bus);
                     }
                     subMenus.add(subMenu);
                     x++;
