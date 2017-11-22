@@ -1,13 +1,11 @@
 package com.combitracker;
 
-import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.app.Fragment;
+
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.view.menu.MenuBuilder;
-import android.view.SubMenu;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,37 +13,40 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
+import com.combitracker.Fragments.AgregarCombi;
+import com.combitracker.Fragments.AgregarRuta;
+import com.combitracker.Fragments.addElement;
+import com.combitracker.Fragments.addRuta;
+import com.combitracker.Objetos.Combi;
+import com.combitracker.Objetos.cooki;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        addElement.OnFragmentInteractionListener,
+        addRuta.OnFragmentInteractionListener,
+        AgregarCombi.OnFragmentInteractionListener,
+        AgregarRuta.OnFragmentInteractionListener{
 
-    private GoogleMap gMap;
-    private ArrayList<SubMenu> subMenus=new ArrayList<>();
+
     private Menu menuNavigation;
     //Referencias de firebase
-    public FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
+
+
+    private cooki sesion;
+    private Fragment fragment=null;
+
+
+    private boolean op;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        firebaseDatabase=FirebaseDatabase.getInstance();
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -57,37 +58,16 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         menuNavigation = navigationView.getMenu();
 
-        databaseReference=firebaseDatabase.getReference("Rutas");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int x=0;
-                for(DataSnapshot ds:dataSnapshot.getChildren()){
-                    String ruta = ds.getKey();
-                    SubMenu subMenu = menuNavigation.addSubMenu(ruta);
-                    DataSnapshot subRutas= ds.child("Subrutas");
-                    for(DataSnapshot ds2:subRutas.getChildren()){
-                        subMenu.add(x,subMenus.size(),0,ds2.getKey()).setIcon(R.drawable.bus);
-                    }
-                    subMenus.add(subMenu);
-                    x++;
 
 
-                }
-            }
+        fragment=null;
+        fragment= new addElement();
+        abrirFragment(fragment);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapa);
-        mapFragment.getMapAsync(this);
 
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -113,11 +93,7 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.opcLogin) {
-            Intent i = new Intent(MainActivity.this,ActivityLogeo.class);
-            startActivity(i);
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -125,22 +101,78 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        String titulo = item.getTitle().toString();
-        Toast.makeText(MainActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+        fragment=null;
 
-        DatabaseReference dbref= firebaseDatabase.getReference("Rutas");
 
+        if(item.getTitle().toString().equalsIgnoreCase("Rutas")){
+            fragment= new addRuta();
+
+        }else{
+            fragment= new addElement();
+
+        }
+
+
+        abrirFragment(fragment);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        gMap=googleMap;
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void cerrarFragmrnt() {
+
+        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.contenedor,new addElement());
+        ft.commit();
+    }
+
+    @Override
+    public void agregarCombi() {
+
+        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.contenedor,new AgregarCombi()).addToBackStack(addElement.class.getName());
+        ft.commit();
+    }
+
+    @Override
+    public void modificarCombi(Combi aux) {
+        fragment=new AgregarCombi();
+        Bundle datos= new Bundle();
+        datos.putString("number",aux.getNumero());
+        datos.putString("user",aux.getUsuario());
+        datos.putString("pass",aux.getContraseña());
+        datos.putString("route",aux.getRutaAsignada());
+        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.contenedor,fragment).addToBackStack(addElement.class.getName());
+        ft.commit();
+        fragment.setArguments(datos);
+    }
+
+
+    @Override
+    public void agregarRuta() {
+
+        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.contenedor,new AgregarRuta()).addToBackStack(addRuta.class.getName());
+        ft.commit();
+    }
+
+    public  void abrirFragment(Fragment fragment){
+
+
+        if(fragment!=null){
+            FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.contenedor,fragment);
+            ft.commit();
+        }
 
     }
 }

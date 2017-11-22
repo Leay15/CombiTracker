@@ -8,11 +8,9 @@
     tools:context="com.combitracker.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <fragment
-        android:id="@+id/mapa"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.combitracker.MainActivity" />
+        android:id="@+id/contenedor"></FrameLayout>
 
 </android.support.constraint.ConstraintLayout>

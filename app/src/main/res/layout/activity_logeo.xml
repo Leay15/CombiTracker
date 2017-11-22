@@ -14,7 +14,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
+        android:inputType="textEmailAddress"
         android:id="@+id/txUsuario"/>
     <TextView
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
+        android:inputType="textPassword"
         android:id="@+id/txContraseña"/>
     <LinearLayout
         android:layout_width="match_parent"
