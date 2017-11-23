@@ -2,18 +2,23 @@ package com.combitracker.Fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.style.IconMarginSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.combitracker.MainActivity;
@@ -106,7 +111,7 @@ public class addElement extends Fragment {
                 mListener.agregarCombi();
             }
         });
-
+        fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.botones)));
 
         return v;
     }
@@ -146,48 +151,64 @@ public class addElement extends Fragment {
     }
 
     private void mensajeEmergente(String title,final int position){
-        AlertDialog.Builder dialog= new AlertDialog.Builder(getContext());
-        dialog.setTitle(title);
-        dialog.setPositiveButton("ELIMINAR", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                id=listaCombis.get(position).getUsuario();
-                id=id.substring(id.lastIndexOf("#")+1);
-                ref=BD.getReference().child("Rutas").child(sesion.getUserRuta()).child("Combis").child(id);
 
-                ref.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
 
-                        if(task.isSuccessful()){
-                            listaCombis.remove(position);
-                            cAdapter.notifyDataSetChanged();
-                            Toast.makeText(getContext(), "Elemento eliminado exitosamente", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(getContext(), "Ocurrio un error al eliminar el elemento", Toast.LENGTH_SHORT).show();
+        final AlertDialog dialog= new AlertDialog.Builder(getContext()).create();
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.mensaje_emergente, null);
+        dialog.setView(dialogView);
+
+        final TextView titulo =dialogView.findViewById(R.id.title_mensaje);
+        final ImageButton cancel=dialogView.findViewById(R.id.btnSalir);
+        final ImageButton modif=dialogView.findViewById(R.id.btnModificar);
+        final ImageButton elim=dialogView.findViewById(R.id.btnEliminar);
+        dialog.setCancelable(true);
+
+            titulo.setText(title);
+
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                }
+            });
+
+            elim.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    id=listaCombis.get(position).getUsuario();
+                    id=id.substring(id.lastIndexOf("#")+1);
+                    ref=BD.getReference().child("Rutas").child(sesion.getUserRuta()).child("Combis").child(id);
+
+                    ref.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            if(task.isSuccessful()){
+                                listaCombis.remove(position);
+                                cAdapter.notifyDataSetChanged();
+                                Toast.makeText(getContext(), "Elemento eliminado exitosamente", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(getContext(), "Ocurrio un error al eliminar el elemento", Toast.LENGTH_SHORT).show();
+
+                            }
+                            dialog.cancel();
 
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
 
-        dialog.setNegativeButton("MODIFICAR", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mListener.modificarCombi(listaCombis.get(position));
+               modif.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       mListener.modificarCombi(listaCombis.get(position));
+                       dialog.cancel();
 
-            }
-        });
+                   }
+               });
 
-        dialog.setNeutralButton("CANCELAR", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        dialog.create();
         dialog.show();
     }
 

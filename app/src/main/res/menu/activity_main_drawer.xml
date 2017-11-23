@@ -7,11 +7,19 @@
     <item
         android:id="@+id/nav_Rutas"
         android:icon="@drawable/ruta"
-        android:title="@string/ruta" />
+        android:title="@string/ruta"
+        />
 
     <item
         android:id="@+id/nav_Combis"
         android:icon="@drawable/combi"
-        android:title="@string/combi" />
+        android:title="@string/combi"
+        />
 
+
+    <item
+        android:id="@+id/LogOut"
+        android:icon="@drawable/atras"
+        android:title="@string/cerrarSesion">
+    </item>
 </menu>

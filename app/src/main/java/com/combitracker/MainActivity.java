@@ -1,5 +1,6 @@
 package com.combitracker;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 
@@ -19,6 +20,7 @@ import com.combitracker.Fragments.AgregarRuta;
 import com.combitracker.Fragments.addElement;
 import com.combitracker.Fragments.addRuta;
 import com.combitracker.Objetos.Combi;
+import com.combitracker.Objetos.Ruta;
 import com.combitracker.Objetos.cooki;
 
 public class MainActivity extends AppCompatActivity
@@ -54,18 +56,17 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         menuNavigation = navigationView.getMenu();
 
 
 
-
+        sesion=new cooki(this);
         fragment=null;
         fragment= new addElement();
-        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.contentG,fragment).addToBackStack(addRuta.class.getName());
-        ft.commit();
+        abrirFragment(fragment);
 
     }
 
@@ -81,12 +82,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -106,21 +102,32 @@ public class MainActivity extends AppCompatActivity
         fragment=null;
 
 
-        if(item.getTitle().toString().equalsIgnoreCase("Rutas")){
-            fragment= new addRuta();
-
+        if(item.getTitle().toString().equalsIgnoreCase("Cerrar Sesión")){
+            cerrarSesion();
         }else{
-            fragment= new addElement();
+            if(item.getTitle().toString().equalsIgnoreCase("Rutas")){
+                fragment= new addRuta();
+
+            }else{
+                fragment= new addElement();
+
+            }
 
         }
 
 
-        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.contentF,fragment).addToBackStack(addRuta.class.getName());
-        ft.commit();
+        abrirFragment(fragment);
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void cerrarSesion() {
+        sesion.limpiarCooki();
+        Intent i= new Intent(this,ActivityLogeo.class);
+        startActivity(i);
+        this.finish();
     }
 
 
@@ -128,6 +135,12 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+    @Override
+    public void subirRuta() {
+
+    }
+
 
     @Override
     public void cerrarFragmrnt() {
@@ -168,7 +181,20 @@ public class MainActivity extends AppCompatActivity
         ft.commit();
     }
 
-    /*
+    @Override
+    public void modificarRuta(Ruta ruta) {
+        fragment=new AgregarRuta();
+        Bundle datos= new Bundle();
+        datos.putString("camino",ruta.getCamino());
+        datos.putString("ruta",ruta.getRuta().substring(0,ruta.getRuta().lastIndexOf("#")));
+        datos.putString("id",ruta.getRuta().substring(ruta.getRuta().lastIndexOf("#")+1));
+        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.contentF,fragment).addToBackStack(addElement.class.getName());
+        ft.commit();
+        fragment.setArguments(datos);
+    }
+
+
     public  void abrirFragment(Fragment fragment){
 
 
@@ -181,5 +207,4 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    */
 }

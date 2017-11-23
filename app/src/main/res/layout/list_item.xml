@@ -58,6 +58,6 @@
     <View
         android:layout_width="wrap_content"
         android:layout_height="5dp"
-        android:background="#500202"/>
+        android:background="@color/colorAccent"/>
 
 </LinearLayout>

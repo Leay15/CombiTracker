@@ -1,6 +1,7 @@
 package com.combitracker.Objetos;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ public class rutaAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<Ruta> lista;
+    protected  String num;
+
 
     public rutaAdapter(Context context, ArrayList<Ruta> lista) {
         this.context = context;
@@ -50,8 +53,10 @@ public class rutaAdapter extends BaseAdapter {
 
 
 
+        num=lista.get(position).getRuta();
+        num=num.substring(0,num.lastIndexOf("#"));
         ruta=item.findViewById(R.id.rutaName);
-        ruta.setText("RUTA:    "+lista.get(position).getRuta());
+        ruta.setText("RUTA:    "+num);
 
 
         return item;

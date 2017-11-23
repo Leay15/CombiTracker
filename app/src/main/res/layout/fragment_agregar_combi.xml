@@ -83,18 +83,22 @@
                     android:gravity="center">
 
                     <ImageButton
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:id="@+id/saveCombi"
-                        android:src="@drawable/combi"
+                        android:layout_width="80dp"
+                        android:layout_height="60dp"
+                        android:id="@+id/cancelCombi"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/atras"
                         android:layout_marginRight="20dp"/>
 
-
                     <ImageButton
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:id="@+id/cancelCombi"
-                        android:src="@drawable/combi"/>
+                        android:layout_width="80dp"
+                        android:layout_height="60dp"
+                        android:id="@+id/saveCombi"
+                        android:src="@drawable/agregar_combi"
+                        android:scaleType="fitCenter"/>
+
+
+
                 </LinearLayout>
             </LinearLayout>
 

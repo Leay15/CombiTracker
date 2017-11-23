@@ -24,7 +24,8 @@
 
         <uses-library android:name="com.google.android.maps" />
 
-        <activity android:name=".ActivityLogeo">
+        <activity android:name=".ActivityLogeo"
+            android:theme="@style/noBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

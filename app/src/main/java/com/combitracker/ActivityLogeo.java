@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.combitracker.Objetos.cooki;
@@ -26,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 public class ActivityLogeo extends AppCompatActivity  {
 
     EditText txUsuario,txContraseña;
-    Button btnCancelar,btnIngresar;
+    ImageView btnIngresar;
 
     private cooki sesion;
 
@@ -46,7 +48,6 @@ public class ActivityLogeo extends AppCompatActivity  {
         auth=FirebaseAuth.getInstance();
         progressDialog= new ProgressDialog(this);
 
-        btnCancelar=findViewById(R.id.btnCancelar);
         btnIngresar=findViewById(R.id.btnIngresar);
 
         ref=FirebaseDatabase.getInstance().getReference().child("Rutas");
@@ -60,12 +61,6 @@ public class ActivityLogeo extends AppCompatActivity  {
             ActivityLogeo.this.finish();
         }
 
-        btnCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override

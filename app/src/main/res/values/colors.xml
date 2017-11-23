@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#b53f41</color>
-    <color name="colorPrimaryDark">#9f3034</color>
-    <color name="colorAccent">#696969</color>
+    <color name="colorPrimary">#202020</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#ff0000</color>
+
+    <color name="botones">#818181</color>
 </resources>
