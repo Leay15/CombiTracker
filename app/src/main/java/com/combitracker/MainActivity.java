@@ -60,10 +60,12 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
         fragment=null;
         fragment= new addElement();
-        abrirFragment(fragment);
-
+        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.contentG,fragment).addToBackStack(addRuta.class.getName());
+        ft.commit();
 
     }
 
@@ -113,8 +115,9 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-        abrirFragment(fragment);
-
+        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.contentF,fragment).addToBackStack(addRuta.class.getName());
+        ft.commit();
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity
     public void cerrarFragmrnt() {
 
         FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.contenedor,new addElement());
+        ft.replace(R.id.contentF,new addElement());
         ft.commit();
     }
 
@@ -138,7 +141,7 @@ public class MainActivity extends AppCompatActivity
     public void agregarCombi() {
 
         FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.contenedor,new AgregarCombi()).addToBackStack(addElement.class.getName());
+        ft.replace(R.id.contentF,new AgregarCombi()).addToBackStack(addElement.class.getName());
         ft.commit();
     }
 
@@ -151,7 +154,7 @@ public class MainActivity extends AppCompatActivity
         datos.putString("pass",aux.getContraseña());
         datos.putString("route",aux.getRutaAsignada());
         FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.contenedor,fragment).addToBackStack(addElement.class.getName());
+        ft.replace(R.id.contentF,fragment).addToBackStack(addElement.class.getName());
         ft.commit();
         fragment.setArguments(datos);
     }
@@ -161,18 +164,22 @@ public class MainActivity extends AppCompatActivity
     public void agregarRuta() {
 
         FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.contenedor,new AgregarRuta()).addToBackStack(addRuta.class.getName());
+        ft.replace(R.id.contentF,new AgregarRuta()).addToBackStack(addRuta.class.getName());
         ft.commit();
     }
 
+    /*
     public  void abrirFragment(Fragment fragment){
+
 
 
         if(fragment!=null){
             FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.contenedor,fragment);
+            ft.replace(R.id.contentF,fragment);
             ft.commit();
         }
 
     }
+
+    */
 }

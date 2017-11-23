@@ -7,20 +7,12 @@ package com.combitracker.Objetos;
 public class Combi {
     private String Contraseña,Lat,Lon,Numero,RutaAsignada,Usuario;
 
-    public Combi(String contraseña, String lat, String lon, String numero, String rutaAsignada, String usuario) {
-        Contraseña = contraseña;
-        Lat = lat;
-        Lon = lon;
-        Numero = numero;
-        RutaAsignada = rutaAsignada;
-        Usuario = usuario;
-    }
 
     public Combi() {
     }
 
-    public String getContraseña() {
 
+    public String getContraseña() {
         return Contraseña;
     }
 

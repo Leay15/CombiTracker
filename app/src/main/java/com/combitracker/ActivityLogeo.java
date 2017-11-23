@@ -23,7 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ActivityLogeo extends MainActivity {
+public class ActivityLogeo extends AppCompatActivity  {
 
     EditText txUsuario,txContraseña;
     Button btnCancelar,btnIngresar;
@@ -51,6 +51,8 @@ public class ActivityLogeo extends MainActivity {
 
         ref=FirebaseDatabase.getInstance().getReference().child("Rutas");
         sesion=new cooki(this);
+
+
 
         if(!sesion.getUserEmail().equalsIgnoreCase("NA")){
             Intent mainA=new Intent(ActivityLogeo.this,MainActivity.class);

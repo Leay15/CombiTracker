@@ -81,6 +81,9 @@ public class AgregarCombi extends Fragment {
         spnRutas=v.findViewById(R.id.spnRutas);
 
         BD=FirebaseDatabase.getInstance();
+        try{
+            BD.setPersistenceEnabled(true);
+        }catch(Exception e){}
         ref=BD.getReference().child("Rutas");
 
         llenarSpinner();
@@ -149,12 +152,11 @@ public class AgregarCombi extends Fragment {
     private void llenarSpinner() {
 
         ref=BD.getReference().child("Rutas").child(sesion.getUserRuta()).child("Subrutas");
-        Log.i("TAGYY",ref.toString());
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snap) {
-                Ruta aux= new Ruta();
+                Ruta aux;
                 for(DataSnapshot ds:snap.getChildren()){
                     aux=ds.getValue(Ruta.class);
 
@@ -191,7 +193,6 @@ public class AgregarCombi extends Fragment {
 
         ref=BD.getReference().child("Rutas").child(sesion.getUserRuta()).child("Combis");
 
-        Log.i("TAGY",sesion.getUserRuta());
 
         Combi aux= new Combi();
         aux.setLat("0");
@@ -202,6 +203,7 @@ public class AgregarCombi extends Fragment {
         aux.setRutaAsignada(spnRutas.getSelectedItem().toString());
 
 
+        Log.i("TAGE",aux.toString());
         ref.push().setValue(aux).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
