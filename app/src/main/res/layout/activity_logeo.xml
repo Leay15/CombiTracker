@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:textColorHint="#818181"
             android:backgroundTint="#3b999999"
+            android:id="@+id/inUserLog"
 
             >
 
@@ -29,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Usuario"
                 android:textColor="#FFFFFF"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:textSize="24sp"
                 android:backgroundTint="#818181"/>
 
@@ -38,7 +39,8 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="#818181">
+            android:textColorHint="#818181"
+            android:id="@+id/inPassLog">
             <EditText
                 android:id="@+id/txContraseña"
                 android:layout_width="match_parent"

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer_list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <item android:drawable="@color/colorPrimary" />
+
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@mipmap/ic_launcher" />
+    </item>
+
+</layer_list>

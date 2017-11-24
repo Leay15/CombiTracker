@@ -18,10 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.combitracker.MainActivity;
 import com.combitracker.Objetos.Combi;
 import com.combitracker.Objetos.Ruta;
 import com.combitracker.Objetos.cooki;
@@ -52,6 +54,8 @@ public class addRuta extends Fragment {
     protected String id;
     private rutaAdapter rAdapter;
 
+    private ImageView add;
+
 
     public addRuta() {
         // Required empty public constructor
@@ -70,8 +74,10 @@ public class addRuta extends Fragment {
         View v= inflater.inflate(R.layout.fragment_add_ruta, container, false);
 
         elementos=v.findViewById(R.id.listaRutas);
+        add=v.findViewById(R.id.fab);
         rutas= new ArrayList<>();
         sesion=new cooki(getContext());
+        MainActivity.titulo.setText("Rutas");
 
 
         rAdapter = new rutaAdapter(getContext(),rutas);
@@ -99,15 +105,12 @@ public class addRuta extends Fragment {
         });
 
 
-        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-               mListener.agregarRuta();
-
+            public void onClick(View v) {
+                mListener.agregarRuta();
             }
         });
-        fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.botones)));
 
 
 
@@ -187,7 +190,6 @@ public class addRuta extends Fragment {
                             Toast.makeText(getContext(), "Ocurrio un error al eliminar el registro", Toast.LENGTH_SHORT).show();
 
                         }
-                        rAdapter.notifyDataSetChanged();
 
                         dialog.cancel();
 
@@ -221,8 +223,7 @@ public class addRuta extends Fragment {
                     rutas.add(aux);
                 }
 
-                rutaAdapter rAdapter = new rutaAdapter(getContext(),rutas);
-                elementos.setAdapter(rAdapter);
+                rAdapter.notifyDataSetChanged();
                 ref.removeEventListener(this);
             }
 

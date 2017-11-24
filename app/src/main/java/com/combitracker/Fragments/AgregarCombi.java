@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.combitracker.MainActivity;
 import com.combitracker.Objetos.Combi;
 import com.combitracker.Objetos.Ruta;
 import com.combitracker.Objetos.cooki;
@@ -66,7 +67,6 @@ public class AgregarCombi extends Fragment {
         View v= inflater.inflate(R.layout.fragment_agregar_combi, container, false);
 
         sesion= new cooki(getContext());
-
         inNumero=v.findViewById(R.id.ti_combi_numero);
         inUser=v.findViewById(R.id.ti_combi_usuario);
         inPass=v.findViewById(R.id.ti_combi_pass);
@@ -90,7 +90,10 @@ public class AgregarCombi extends Fragment {
 
         if(getArguments()==null){
                 //AGREGAR
+            MainActivity.titulo.setText("Agregar combi");
+
         }else{
+            MainActivity.titulo.setText("Modificar combi");
 
             idUpdate=getArguments().getString("user");
             number.setText(getArguments().getString("number"));

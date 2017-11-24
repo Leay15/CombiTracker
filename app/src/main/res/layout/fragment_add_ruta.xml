@@ -9,13 +9,14 @@
      android:layout_height="match_parent"
      android:id="@+id/listaRutas"></ListView>
 
- <android.support.design.widget.FloatingActionButton
+
+ <ImageView
      android:id="@+id/fab"
      android:layout_width="60dp"
      android:layout_height="60dp"
      android:layout_gravity="bottom|end"
      android:layout_margin="@dimen/fab_margin"
      android:scaleType="fitCenter"
-     android:src="@drawable/agregar_ruta" />
+     android:src="@drawable/agregar_ruta"/>
 
 </FrameLayout>

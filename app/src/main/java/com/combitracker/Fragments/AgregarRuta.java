@@ -3,6 +3,8 @@ package com.combitracker.Fragments;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,11 +16,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.combitracker.MainActivity;
 import com.combitracker.Objetos.DirectionsJSONParser;
 import com.combitracker.Objetos.Ruta;
 import com.combitracker.Objetos.cooki;
+import com.combitracker.Objetos.redStatus;
 import com.combitracker.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,8 +39,11 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 
@@ -63,7 +72,12 @@ public class AgregarRuta extends Fragment implements GoogleMap.OnMarkerDragListe
     private Polyline lineAux;
 
     private String ruta,id,camino;
-    private String color="";
+    private String color="000000";
+    FirebaseDatabase BD =FirebaseDatabase.getInstance();
+    private redStatus redstatus;
+    private boolean red=false;
+    private ImageView add,cancel;
+
 
     public AgregarRuta() {
         // Required empty public constructor
@@ -84,10 +98,17 @@ public class AgregarRuta extends Fragment implements GoogleMap.OnMarkerDragListe
         mMapView = (MapView) v.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
 
-
+        add=v.findViewById(R.id.fabA);
+        cancel=v.findViewById(R.id.fabC);
 
         sesion= new cooki(getContext());
         nombre=v.findViewById(R.id.txtNombreRuta);
+        redstatus=new redStatus();
+
+           red=true;
+
+        obtenerColor();
+
 
 
         mMapView.onResume(); // needed to get the map to display immediately
@@ -106,28 +127,41 @@ public class AgregarRuta extends Fragment implements GoogleMap.OnMarkerDragListe
                     ruta=getArguments().getString("ruta");
                     id=getArguments().getString("id");
                     camino=getArguments().getString("camino");
-
-                    Log.i("tag3",ruta+"/"+id+"/"+camino);
-
                     nombre.setText(ruta);
                     pintarRuta(camino.split(","));
+                    MainActivity.titulo.setText("Modificar ruta");
+
+                }else{
+                    MainActivity.titulo.setText("Agregar ruta");
+
                 }
                 googleMap.setOnMarkerDragListener(AgregarRuta.this);
                 googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                     @Override
                     public void onMapLongClick(LatLng latLng) {
                         googleMap.clear();
+
                         if(markFinal==null){
                             markFinal=latLng;
                             Marker m = googleMap.addMarker(new MarkerOptions().position(latLng).draggable(true));
                             coordenadas.add(latLng);
                         }else{
-                            markInicial=markFinal;
-                            markFinal=latLng;
-                            String url = obtenerDireccionesURL(markInicial,markFinal);
-                            DownloadTask downloadTask = new DownloadTask();
-                            downloadTask.execute(url);
+
+
+                                markInicial=markFinal;
+                                markFinal=latLng;
+                                Toast.makeText(getContext(), "Espera un momentoporfavor.", Toast.LENGTH_LONG).show();
+                                String url = obtenerDireccionesURL(markInicial,markFinal);
+                                DownloadTask downloadTask = new DownloadTask();
+                                downloadTask.execute(url);
+
+
+
+
                         }
+
+
+
                     }
                 });
 
@@ -142,37 +176,50 @@ public class AgregarRuta extends Fragment implements GoogleMap.OnMarkerDragListe
         });
 
 
-        FloatingActionButton agregar = (FloatingActionButton) v.findViewById(R.id.fabAdd);
-        agregar.setOnClickListener(new View.OnClickListener() {
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 if(validRuta()){
-                       if(getArguments()!=null){
-                           actualizarRuta();
-                       }else{
-                           guardarRuta();
-                       }
+                    if(getArguments()!=null){
+                        actualizarRuta();
+                    }else{
+                        guardarRuta();
+                    }
                 }
 
             }
         });
-        agregar.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(100,200,100)));
 
-
-        FloatingActionButton cancelar = (FloatingActionButton) v.findViewById(R.id.fabCancel);
-        cancelar.setOnClickListener(new View.OnClickListener() {
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 mListener.cerrarFragmrnt();
-
             }
         });
+
+
 
         return v;
     }
 
+    private void obtenerColor() {
+        DatabaseReference ref=BD.getReference().child("Rutas").child(sesion.getUserRuta()).child("Color");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snap) {
+                color=snap.getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void actualizarRuta() {
-        FirebaseDatabase BD =FirebaseDatabase.getInstance();
+
         DatabaseReference ref=BD.getReference().child("Rutas").child(sesion.getUserRuta()).child("Subrutas").child(id);
 
         rutaFinal="";
@@ -225,7 +272,7 @@ public class AgregarRuta extends Fragment implements GoogleMap.OnMarkerDragListe
 
         line.addAll(coordenadas);
         line.width(10);
-        line.color(Color.rgb(0,0,255));
+        line.color(Color.parseColor(color));
 
 
         if(line!=null){
@@ -343,16 +390,14 @@ public class AgregarRuta extends Fragment implements GoogleMap.OnMarkerDragListe
 
             PolylineOptions lineOptions = new PolylineOptions();
             lineOptions.addAll(coordenadas);
-            lineOptions.color(Color.rgb(0,0,255));
+            lineOptions.color(Color.parseColor(color));
             lineOptions.width(10);
             googleMap.clear();
             agregarMarcadores();
             googleMap.addPolyline(lineOptions);
-            Log.i("tagv","DRAGG-si");
 
         }else{
             markFinal=corUpdt;
-            Log.i("tagv","DRAGG-no");
 
         }
     }
@@ -489,28 +534,43 @@ public class AgregarRuta extends Fragment implements GoogleMap.OnMarkerDragListe
             PolylineOptions lineOptions = null;
             MarkerOptions markerOptions = new MarkerOptions();
 
-            for(int i=0;i<result.size();i++){
-                lineOptions = new PolylineOptions();
+            if(result==null){
+                Toast.makeText(getContext(), "Ha ocurrido un error intente de nuevo", Toast.LENGTH_SHORT).show();
+                markInicial=null;
+                markFinal=null;
+            }else{
+                for(int i=0;i<result.size();i++){
+                    lineOptions = new PolylineOptions();
 
-                List<HashMap<String, String>> path = result.get(i);
+                    List<HashMap<String, String>> path = result.get(i);
 
-                for(int j=0;j<path.size();j++){
-                    HashMap<String,String> point = path.get(j);
+                    for(int j=0;j<path.size();j++){
+                        HashMap<String,String> point = path.get(j);
 
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
-                    coordenadas.add(position);
+                        double lat = Double.parseDouble(point.get("lat"));
+                        double lng = Double.parseDouble(point.get("lng"));
+                        LatLng position = new LatLng(lat, lng);
+                        coordenadas.add(position);
+                    }
+
+                    lineOptions.addAll(coordenadas);
+                    lineOptions.width(10);
+                    try{
+                        lineOptions.color(Color.parseColor(color));
+
+                    }catch (Exception e){
+                        lineOptions.color(Color.BLACK);
+
+                    }
                 }
+                if(lineOptions!=null) {
+                    agregarMarcadores();
+                    googleMap.addPolyline(lineOptions);
+                }
+            }
 
-                lineOptions.addAll(coordenadas);
-                lineOptions.width(10);
-                lineOptions.color(Color.rgb(0,0,255));
-            }
-            if(lineOptions!=null) {
-                agregarMarcadores();
-                googleMap.addPolyline(lineOptions);
-            }
         }
     }
+
+
 }

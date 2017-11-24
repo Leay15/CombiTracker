@@ -1,5 +1,6 @@
 package com.combitracker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -12,8 +13,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.combitracker.Fragments.AgregarCombi;
 import com.combitracker.Fragments.AgregarRuta;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity
 
     private cooki sesion;
     private Fragment fragment=null;
+    public static TextView titulo;
 
 
     private boolean op;
@@ -56,21 +61,27 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        titulo=findViewById(R.id.titleFragment);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         menuNavigation = navigationView.getMenu();
 
-
-
-        sesion=new cooki(this);
         fragment=null;
         fragment= new addElement();
         abrirFragment(fragment);
 
+
+        sesion=new cooki(this);
+
+
     }
 
 
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        return super.onCreateView(name, context, attrs);
+    }
 
     @Override
     public void onBackPressed() {

@@ -14,12 +14,15 @@
         android:id="@+id/nav_Combis"
         android:icon="@drawable/combi"
         android:title="@string/combi"
+        android:iconTint="@color/colorPrimaryDark"
+        android:iconTintMode="src_atop"
         />
 
 
     <item
         android:id="@+id/LogOut"
         android:icon="@drawable/atras"
-        android:title="@string/cerrarSesion">
+        android:title="@string/cerrarSesion"
+        android:iconTint="#ff0000">
     </item>
 </menu>

@@ -16,7 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,8 +56,11 @@ public class addElement extends Fragment {
     public FirebaseDatabase BD;
     private DatabaseReference ref;
     protected String id;
+    private TextView title;
 
     private combiAdapter cAdapter;
+    private ImageView add;
+
     public addElement() {
         // Required empty public constructor
     }
@@ -74,8 +79,12 @@ public class addElement extends Fragment {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_add_element, container, false);
 
+        MainActivity.titulo.setText("Combis");
+
         elementos=v.findViewById(R.id.lstElementos);
+        add=v.findViewById(R.id.fabC);
         sesion= new cooki(getContext());
+
 
 
         listaCombis= new ArrayList<>();
@@ -104,14 +113,13 @@ public class addElement extends Fragment {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fabC);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 mListener.agregarCombi();
             }
         });
-        fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.botones)));
 
         return v;
     }

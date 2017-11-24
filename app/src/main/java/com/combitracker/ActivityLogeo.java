@@ -3,7 +3,9 @@ package com.combitracker;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.combitracker.Objetos.cooki;
+import com.combitracker.Objetos.redStatus;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -29,6 +32,7 @@ public class ActivityLogeo extends AppCompatActivity  {
 
     EditText txUsuario,txContraseña;
     ImageView btnIngresar;
+    private TextInputLayout inUser,inPass;
 
     private cooki sesion;
 
@@ -44,22 +48,24 @@ public class ActivityLogeo extends AppCompatActivity  {
 
         txUsuario=findViewById(R.id.txUsuario);
         txContraseña=findViewById(R.id.txContraseña);
+        inUser=findViewById(R.id.inUserLog);
+        inPass=findViewById(R.id.inPassLog);
 
         auth=FirebaseAuth.getInstance();
         progressDialog= new ProgressDialog(this);
 
         btnIngresar=findViewById(R.id.btnIngresar);
+        redStatus aux= new redStatus();
+        if(aux.redStatus()){
+            Log.i("TAGKK","SI");
+        }else{
+            Log.i("TAGKK","No");
+
+        }
 
         ref=FirebaseDatabase.getInstance().getReference().child("Rutas");
         sesion=new cooki(this);
 
-
-
-        if(!sesion.getUserEmail().equalsIgnoreCase("NA")){
-            Intent mainA=new Intent(ActivityLogeo.this,MainActivity.class);
-            startActivity(mainA);
-            ActivityLogeo.this.finish();
-        }
 
 
         btnIngresar.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +115,6 @@ public class ActivityLogeo extends AppCompatActivity  {
 
 
                     if (task.isSuccessful()) {
-                        progressDialog.dismiss();
 
                         sesion.limpiarCooki();
                         sesion.setUserEmail(email);
@@ -131,19 +136,26 @@ public class ActivityLogeo extends AppCompatActivity  {
                                 ref.removeEventListener(this);
                                 Intent mainA=new Intent(ActivityLogeo.this,MainActivity.class);
                                 startActivity(mainA);
+                                progressDialog.dismiss();
                                 ActivityLogeo.this.finish();
                             }
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-
                             }
                         });
 
 
                     }else{
+
                         progressDialog.dismiss();
-                        Toast.makeText(ActivityLogeo.this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                        if(task.getException().getMessage().contains("network")){
+                            Toast.makeText(ActivityLogeo.this, "Verifica tu conexion a internet", Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            Toast.makeText(ActivityLogeo.this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+
+                        }
 
                     }
                 }

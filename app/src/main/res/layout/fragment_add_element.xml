@@ -9,13 +9,13 @@
         android:layout_height="match_parent"
         android:id="@+id/lstElementos"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <ImageView
         android:id="@+id/fabC"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:scaleType="fitCenter"
-        android:src="@drawable/agregar_combi"
-        android:tint="@color/botones"/>
+        android:scaleType="centerInside"
+        android:src="@drawable/agregar_combi"/>
+
 </FrameLayout>

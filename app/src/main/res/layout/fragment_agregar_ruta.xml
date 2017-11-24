@@ -36,24 +36,19 @@
 
         </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabAdd"
+    <ImageView
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:scaleType="fitCenter"
-        android:src="@drawable/add"
-        android:tint="@color/botones"/>
+        android:src="@drawable/palomaverde"
+        android:id="@+id/fabA"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabCancel"
+    <ImageView
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:padding="0dp"
         android:layout_gravity="bottom|start"
         android:layout_margin="@dimen/fab_margin"
-        android:scaleType="fitXY"
-        android:src="@drawable/cancelar"
-        android:tint="@color/botones"/>
+        android:src="@drawable/xroja"
+        android:id="@+id/fabC"/>
 </FrameLayout>
