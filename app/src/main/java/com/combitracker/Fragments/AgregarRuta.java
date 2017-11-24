@@ -72,7 +72,7 @@ public class AgregarRuta extends Fragment implements GoogleMap.OnMarkerDragListe
     private Polyline lineAux;
 
     private String ruta,id,camino;
-    private String color="000000";
+    private String color="#000000";
     FirebaseDatabase BD =FirebaseDatabase.getInstance();
     private redStatus redstatus;
     private boolean red=false;
